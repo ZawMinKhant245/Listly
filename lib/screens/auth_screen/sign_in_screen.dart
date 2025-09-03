@@ -13,67 +13,95 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
 
   bool isVisible=true;
+  final key=GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    debugPrint('build body');
     return Scaffold(
-      appBar: AppBar(
-        title: Text('SignIn'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Image.asset('assets/flag.png',height: 200,),
-            const SizedBox(height:30,),
-            TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
-            const SizedBox(height: 20,),
-            Padding(
+      appBar: AppBar(),
+      body: Form(
+        key: key,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Image.asset('assets/flag.png',height: 200,),
+              const SizedBox(height:30,),
+              const TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
+              const SizedBox(height: 20,),
+              Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey,
-                      blurStyle: BlurStyle.outer,
-                      blurRadius:10,
-                      offset: Offset(1, 1)
+                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey,
+                          blurStyle: BlurStyle.outer,
+                          blurRadius:10,
+                          offset: Offset(1, 1)
 
-                  )
-                ]
-            ),
-            child: TextFormField(
-              obscureText: isVisible,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
-                suffixIcon:IconButton(onPressed: (){
-                  setState(() {
-                    isVisible = !isVisible;
-                  });
-                }, icon:isVisible?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
-                border:InputBorder.none,
-                hintText: 'Password',
-                hintStyle: TextStyle(fontSize: 23),
+                      )
+                    ]
+                ),
+                child: TextFormField(
+                  obscureText: isVisible,
+                  validator: (text){
+                    if( text == null || text.isEmpty ){
+                      return 'Enter password';
+                    }else{
+                      return null;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon:IconButton(
+                        onPressed: (){
+                          setState(() {
+                            isVisible = !isVisible;
+                          });
+                        }, icon:isVisible?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
+                    border:InputBorder.none,
+                    hintText: 'Password',
+                    hintStyle: TextStyle(fontSize: 23),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-            Row(
-              children: [
-                Text("Don't Have Account Yet?"),
-                TextButton(onPressed: (){
+              const SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ButtonWidget(text: 'Sign in',onPress: (){
+                  if(key.currentState!.validate()){
+
+                  }else{
+
+                  }
+                },),
+              ),
+              const SizedBox(height: 20,),
+              TextButton(onPressed: (){}, child: Text('Forgot password?',style: TextStyle(fontSize: 23),)),
+              const SizedBox(height: 20,),
+              Text('Or',style: TextStyle(fontSize: 24),),
+              const SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ButtonWidget(text: 'Sign Up',onPress: (){
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_)=>SignUpScreen())
+                      MaterialPageRoute(builder: (_)=>SignUpScreen())
                   );
-                }, child: Text('Sign Up'))
-              ],
-            )
-          ],
+                },),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
 
 

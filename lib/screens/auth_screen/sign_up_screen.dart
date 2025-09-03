@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listly/screens/auth_screen/sign_in_screen.dart';
 
 import '../widgets/widget.dart';
 
@@ -11,95 +12,148 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
 
+  final passwordController=TextEditingController();
+  final confirmPasswordController=TextEditingController();
   bool isVisible=true;
+  bool isVisible1=true;
+
+  final keys =GlobalKey<FormState>();
+  // @override
+  // void dispose() {
+  //   passwordController.dispose();
+  //   confirmPasswordController.dispose();
+  //   // TODO: implement dispose
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('SignUp'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Image.asset('assets/flag.png',height: 200,),
-            const SizedBox(height:30,),
-            TextFromFieldWidget(icons: Icon(Icons.person),text: 'Name',),
-            const SizedBox(height: 20,),
-            TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
-            const SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurStyle: BlurStyle.outer,
-                          blurRadius:10,
-                          offset: Offset(1, 1)
-
-                      )
-                    ]
-                ),
-                child: TextFormField(
-                  obscureText: isVisible,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon:IconButton(onPressed: (){
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
-                    }, icon:isVisible?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
-                    border:InputBorder.none,
-                    hintText: 'Password',
-                    hintStyle: TextStyle(fontSize: 23),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurStyle: BlurStyle.outer,
-                          blurRadius:10,
-                          offset: Offset(1, 1)
-
-                      )
-                    ]
-                ),
-                child: TextFormField(
-                  obscureText: isVisible,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon:IconButton(onPressed: (){
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
-                    }, icon:isVisible?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
-                    border:InputBorder.none,
-                    hintText: 'Confirm Password',
-                    hintStyle: TextStyle(fontSize: 23),
-                  ),
-                ),
-              ),
-            ),
-            Row(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Form(
+            key: keys,
+            child: Column(
               children: [
-                Text("Already Have Account"),
-                TextButton(onPressed: (){}, child: Text('Sign In'))
+                Image.asset('assets/flag.png',height: 200,),
+                const SizedBox(height:30,),
+                TextFromFieldWidget(icons: Icon(Icons.person),text: 'Name',),
+                const SizedBox(height: 20,),
+                TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
+                const SizedBox(height: 20,),
+                TextFromFieldWidget(icons: Icon(Icons.phone),text: 'Phone number',),
+                const SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurStyle: BlurStyle.outer,
+                              blurRadius:10,
+                              offset: Offset(1, 1)
+        
+                          )
+                        ]
+                    ),
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: isVisible,
+                      validator: (text){
+                        if( text == null || text.isEmpty ){
+                          return 'Please Enter password';
+                        }else if(text != confirmPasswordController.text){
+                          return 'password not match';
+                        }else{
+                          return null;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        suffixIcon:IconButton(onPressed: (){
+                          setState(() {
+                            isVisible = !isVisible;
+                          });
+                        }, icon:isVisible?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
+                        border:InputBorder.none,
+                        hintText: 'Password',
+                        hintStyle: TextStyle(fontSize: 23),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurStyle: BlurStyle.outer,
+                              blurRadius:10,
+                              offset: Offset(1, 1)
+        
+                          )
+                        ]
+                    ),
+                    child: TextFormField(
+                      obscureText: isVisible1,
+                      controller: confirmPasswordController,
+                      validator: (text){
+                        if( text == null || text.isEmpty ){
+                          return 'Please Enter password';
+                        }else if(text != passwordController.text){
+                          return 'password not match';
+                        }else{
+                          return null;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        suffixIcon:IconButton(onPressed: (){
+                          setState(() {
+                            isVisible1 = !isVisible1;
+                          });
+                        }, icon:isVisible1?Icon(Icons.visibility_off): Icon(Icons.visibility)) ,
+                        border:InputBorder.none,
+                        hintText: 'Confirm Password',
+                        hintStyle: TextStyle(fontSize: 23),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: ButtonWidget(text: 'Sign Up',onPress: (){
+                    if(keys.currentState!.validate()){
+
+                    }else{
+
+                    }
+                  },),
+                ),
+                const SizedBox(height: 30,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already Have Account!!"),
+                    TextButton(onPressed: (){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>SignInScreen()));
+                    }, child: Text('Sign In'))
+                  ],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );

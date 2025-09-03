@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//TextFormField
 class TextFromFieldWidget extends StatelessWidget {
   const TextFromFieldWidget({
     super.key,
@@ -32,6 +33,13 @@ class TextFromFieldWidget extends StatelessWidget {
             ]
         ),
         child: TextFormField(
+          validator: (value){
+            if(value==null || value.isEmpty){
+              return 'Enter $text';
+            }else{
+              return null;
+            }
+          },
           decoration: InputDecoration(
               prefixIcon: icons,
               suffixIcon: iconButton,
@@ -40,6 +48,30 @@ class TextFromFieldWidget extends StatelessWidget {
               hintStyle: TextStyle(fontSize: 23),
           ),
         ),
+      ),
+    );
+  }
+}
+
+//button
+class ButtonWidget extends StatelessWidget {
+  const ButtonWidget({
+    super.key,
+    required this.text,
+    required this.onPress,
+  });
+  final String text;
+  final VoidCallback onPress;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPress,
+      child: Text(text,style: TextStyle(fontSize: 24),),
+      style: ElevatedButton.styleFrom(
+          minimumSize:Size(double.infinity, 60),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white
       ),
     );
   }
