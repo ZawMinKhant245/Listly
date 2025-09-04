@@ -21,7 +21,6 @@ class TextFromFieldWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -48,7 +47,7 @@ class TextFromFieldWidget extends StatelessWidget {
               suffixIcon: iconButton,
               border:InputBorder.none,
               hintText: text,
-              hintStyle: TextStyle(fontSize: 23),
+              hintStyle: TextStyle(fontSize: 20),
           ),
         ),
       ),
@@ -69,9 +68,9 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPress,
-      child: Text(text,style: TextStyle(fontSize: 24),),
+      child: Text(text,style: TextStyle(fontSize: 20),),
       style: ElevatedButton.styleFrom(
-          minimumSize:Size(double.infinity, 60),
+          minimumSize:Size(double.infinity, 50),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white
