@@ -15,6 +15,18 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isVisible=true;
   final key=GlobalKey<FormState>();
 
+  final emailController=TextEditingController();
+  final passwordController=TextEditingController();
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     debugPrint('build body');
@@ -28,7 +40,10 @@ class _SignInScreenState extends State<SignInScreen> {
             children: [
               Image.asset('assets/flag.png',height: 200,),
               const SizedBox(height:30,),
-              const TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
+              TextFromFieldWidget(
+                textEditingController: emailController,
+                icons: const Icon(Icons.email),
+                text: 'Email',),
               const SizedBox(height: 20,),
               Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -47,6 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ]
                 ),
                 child: TextFormField(
+                  controller: passwordController,
                   obscureText: isVisible,
                   validator: (text){
                     if( text == null || text.isEmpty ){

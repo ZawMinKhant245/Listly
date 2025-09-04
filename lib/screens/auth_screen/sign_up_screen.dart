@@ -14,17 +14,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final passwordController=TextEditingController();
   final confirmPasswordController=TextEditingController();
+  final nameController=TextEditingController();
+  final emailController=TextEditingController();
+  final phoneController=TextEditingController();
+
   bool isVisible=true;
   bool isVisible1=true;
 
   final keys =GlobalKey<FormState>();
-  // @override
-  // void dispose() {
-  //   passwordController.dispose();
-  //   confirmPasswordController.dispose();
-  //   // TODO: implement dispose
-  //   super.dispose();
-  // }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Image.asset('assets/flag.png',height: 200,),
                 const SizedBox(height:30,),
-                TextFromFieldWidget(icons: Icon(Icons.person),text: 'Name',),
+                TextFromFieldWidget(
+                  textEditingController: nameController,
+                  icons: Icon(Icons.person),text: 'Name',),
                 const SizedBox(height: 20,),
-                TextFromFieldWidget(icons: Icon(Icons.email),text: 'Email',),
+                TextFromFieldWidget(textEditingController:emailController,icons: Icon(Icons.email),text: 'Email',),
                 const SizedBox(height: 20,),
-                TextFromFieldWidget(icons: Icon(Icons.phone),text: 'Phone number',),
+                TextFromFieldWidget(textEditingController:phoneController,icons: Icon(Icons.phone),text: 'Phone number',),
                 const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

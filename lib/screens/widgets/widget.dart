@@ -8,11 +8,13 @@ class TextFromFieldWidget extends StatelessWidget {
     required this.icons,
     required this.text,
     this.iconButton,
+    required this.textEditingController
   });
 
   final Icon icons;
   final String text;
   final IconButton? iconButton;
+  final TextEditingController textEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class TextFromFieldWidget extends StatelessWidget {
             ]
         ),
         child: TextFormField(
+          controller: textEditingController,
           validator: (value){
             if(value==null || value.isEmpty){
               return 'Enter $text';
