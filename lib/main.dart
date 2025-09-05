@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:listly/screens/auth_screen/sign_in_screen.dart';
+import 'package:listly/screens/home_screen.dart';
 import 'package:listly/screens/main_screen.dart';
+import 'package:listly/screens/profile_screen.dart';
 import 'package:listly/screens/record_screen.dart';
 
 void main() {
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SignInScreen()
+      home: MainScreen()
     );
   }
 }

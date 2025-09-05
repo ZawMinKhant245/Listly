@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: AppBar(
           title: Text("Total Collect",style: TextStyle(fontWeight: FontWeight.bold),),
           actions: [
-            Text("50000B",style: TextStyle(fontWeight: FontWeight.bold),)
+            Text("50,000B",style: TextStyle(fontWeight: FontWeight.bold),)
           ],
         ),
       ),
@@ -35,23 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.indigo,
                     width: 2
                   ),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurStyle: BlurStyle.outer,
-                          blurRadius:5,
-                          offset: Offset(1,1)
-
-                      )
-                    ]
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Colleted this month",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
+                    Text("Colleted this month",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 20),),
                     SizedBox(height: 5,),
-                    Text("B 1,2344",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),
+                    Text("B 12,344",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 30)),
                   ],
                 ),
               ),
