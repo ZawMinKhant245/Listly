@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:listly/models/utilities.dart';
 import 'package:listly/screens/auth_screen/sign_up_screen.dart';
 import 'package:listly/screens/main_screen.dart';
+import 'package:listly/provider/auth_provider.dart ' as AP;
+import 'package:provider/provider.dart';
 
 import '../widgets/widget.dart';
 
@@ -19,6 +23,28 @@ class _SignInScreenState extends State<SignInScreen> {
   final emailController=TextEditingController();
   final passwordController=TextEditingController();
 
+  String mode='signIn';
+  bool isLoading=false;
+
+  Future<void>signIn()async{
+    setState(() {
+      isLoading =true;
+    });
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email:emailController.text ,
+          password: passwordController.text
+      );
+      showSuccessSnapBar(context, 'SignIn Successfully');
+      Provider.of<AP.AuthProvider>(context,listen: false).setUser();
+    }catch(e){
+      debugPrint("Error $e");
+      showErrorSnapBar(context, 'SignIn Error $e');
+    }
+    setState(() {
+      isLoading =false;
+    });
+  }
 
   @override
   void dispose() {
@@ -90,11 +116,12 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: ButtonWidget(text: 'Sign in',onPress: (){
+                  child: isLoading?CircularProgressIndicator(color: Colors.teal,):ButtonWidget(text: 'Sign in',onPress: (){
                     if(key.currentState!.validate()){
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_)=>MainScreen())
-                      );
+                      signIn();
+                      // Navigator.of(context).pushReplacement(
+                      //     MaterialPageRoute(builder: (_)=>MainScreen())
+                      // );
                     }else{
         
                     }

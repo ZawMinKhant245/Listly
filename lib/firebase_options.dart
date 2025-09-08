@@ -72,4 +72,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'listly-flutter.firebasestorage.app',
     iosBundleId: 'com.example.listly',
   );
+
 }

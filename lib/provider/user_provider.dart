@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 class UserProvider with ChangeNotifier{
   List<User> users=[];
+   User? me;
 
   final CollectionReference userRef=FirebaseFirestore.instance.collection('users');
 
@@ -44,10 +45,13 @@ class UserProvider with ChangeNotifier{
   }
 
   Future<User?>getUserById(String id,)async{
+    print('UserId $id');
     try{
       DocumentSnapshot documentSnapshot=await userRef.doc(id).get();
-      return User.fromJson(documentSnapshot.id, documentSnapshot.data() as Map<String,dynamic>);
-
+      print('Doc:${documentSnapshot.data()}');
+      me = User.fromJson(id, documentSnapshot.data() as Map<String,dynamic>);
+      notifyListeners();
+      return me;
     }catch(e){
       debugPrint('Error : $e');
       return null;

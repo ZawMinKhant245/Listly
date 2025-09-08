@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:listly/models/utilities.dart';
+import 'package:listly/provider/user_provider.dart';
 import 'package:listly/screens/auth_screen/sign_in_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'package:listly/models/user.dart' as AppUser;
 
 import '../widgets/widget.dart';
 
@@ -24,6 +30,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isVisible1=true;
 
   final keys =GlobalKey<FormState>();
+
+  String mode='signIn';
+
+  bool isLoading=false;
+
+  Future<void>signUp()async{
+    setState(() {
+      isLoading = true;
+    });
+    try{
+      UserCredential userCredential=await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text
+      );
+      final userProvider=Provider.of<UserProvider>(context,listen: false);
+      await userProvider.createUser(
+          AppUser.User(
+              id: userCredential.user!.uid,
+              name: nameController.text.trim(),
+              phone: phoneController.text.trim(),
+              email: emailController.text.trim(),
+              image: '',
+              password: passwordController.text.trim(),
+              idNumber: iDController.text.trim(),
+              role: roleController.text.trim()
+          )
+      );
+      // await FirebaseAuth.instance.signOut();
+      // if(!mounted)return;
+      showSuccessSnapBar(context, "SignUp Successfully");
+      setState(() {
+        mode = 'signIn';
+      });
+    }catch(e){
+      debugPrint("Error SignUp $e");
+      showErrorSnapBar(context, "SignUp Error $e");
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -149,11 +196,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: ButtonWidget(text: 'Sign Up',onPress: (){
+                  child: isLoading?CircularProgressIndicator(color: Colors.teal,):ButtonWidget(text: 'Sign Up',onPress: (){
                     if(keys.currentState!.validate()){
-
-                    }else{
-
+                      signUp();
                     }
                   },),
                 ),
