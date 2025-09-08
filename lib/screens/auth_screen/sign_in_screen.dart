@@ -39,6 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
+                const SizedBox(height:20,),
                 Image.asset('assets/flag.png',height: 200,),
                 const SizedBox(height:30,),
                 TextFromFieldWidget(

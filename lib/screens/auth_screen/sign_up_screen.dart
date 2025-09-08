@@ -17,6 +17,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final nameController=TextEditingController();
   final emailController=TextEditingController();
   final phoneController=TextEditingController();
+  final iDController=TextEditingController();
+  final roleController=TextEditingController();
 
   bool isVisible=true;
   bool isVisible1=true;
@@ -30,6 +32,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    iDController.dispose();
+    roleController.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -44,6 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             key: keys,
             child: Column(
               children: [
+                const SizedBox(height:20,),
                 Image.asset('assets/flag.png',height: 200,),
                 const SizedBox(height:30,),
                 TextFromFieldWidget(
@@ -52,7 +57,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 20,),
                 TextFromFieldWidget(textEditingController:emailController,icons: Icon(Icons.email),text: 'Email',),
                 const SizedBox(height: 20,),
-                TextFromFieldWidget(textEditingController:phoneController,icons: Icon(Icons.phone),text: 'Phone number',),
+                TextFromFieldWidget(textEditingController:iDController,icons: Icon(Icons.numbers),text: 'ID number',),
+                const SizedBox(height: 20,),
+                TextFromFieldWidget(textEditingController:phoneController,icons: Icon(Icons.phone),text: 'Phone Number',),
                 const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -137,6 +144,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20,),
+                TextFromFieldWidget(textEditingController:roleController,icons: Icon(Icons.account_circle),text: 'Role',),
                 const SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),

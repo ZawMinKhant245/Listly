@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685241362577",
+    "project_id": "listly-flutter",
+    "storage_bucket": "listly-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685241362577:android:a01f9a8a9f31f784cbf730",
+        "android_client_info": {
+          "package_name": "com.example.listly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaOvXGXJ1G-mjCPwVOY9a8E1aYaCNUKA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
