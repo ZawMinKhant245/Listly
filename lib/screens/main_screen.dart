@@ -43,10 +43,5 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
 
-      // floatingActionButton: FloatingActionButton(
-      //   mini: true,
-      //   onPressed: (){},child: Icon(Icons.add),
-      // ),
-
   }
 }

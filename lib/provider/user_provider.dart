@@ -58,4 +58,12 @@ class UserProvider with ChangeNotifier{
     }
 
   }
+
+  List<User> get members {
+    return users.where((u) => u.role.toLowerCase() == "member").toList();
+  }
+  List<User> get admin {
+    return users.where((u) => u.role.toLowerCase() == "admin").toList();
+  }
+
 }

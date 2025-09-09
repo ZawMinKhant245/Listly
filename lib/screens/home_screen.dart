@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:listly/models/user_data.dart';
+import 'package:listly/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,8 +12,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  Future<void>getUser()async{
+    Provider.of<UserProvider>(context, listen: false).fetchAllUser();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: AppBar(
@@ -58,21 +75,41 @@ class _HomeScreenState extends State<HomeScreen> {
               Text("Member",style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
               const SizedBox(height: 10,),
               Container(
-                  height: 300,
                   width: double.infinity,
-                  color: Colors.grey,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: 10,
-                      itemBuilder: (context,index){
-                        return ListTile(
-                          leading: Icon(Icons.account_circle),
-                          title: Text('Name'),
-                          subtitle: Text('ID number'),
-                        );
-                      }
-                  )
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Consumer<UserProvider>(
+                      builder: (context,data,child){
+                        final members=data.members;
+                        final me=data.me;
+                        if(members.isEmpty){
+                          return const Center(child: Text("No members found"),);
+                        }
+                        else{
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: members.length,
+                              itemBuilder: (context,index){
+                                final user=members[index];
+                                final isCurrentUser = me != null && user.id == me.id;
+                                return Container(
+                                  color:isCurrentUser?Colors.orange:null,
+                                  child: ListTile(
+                                    leading: Icon(Icons.account_circle),
+                                    title: Text(user.name),
+                                    subtitle: Text(user.idNumber),
+
+                                  ),
+                                );
+                              }
+                          );
+                        }
+
+                  })
+
               )
 
             ],
