@@ -7,6 +7,7 @@ class User {
   final String password;
   final String role;
   final String image;
+  final bool isSelected;
 
   User({
     required this.id,
@@ -17,6 +18,7 @@ class User {
     required this.password,
     required this.idNumber,
     required this.role,
+    this.isSelected = false,
   });
 
   // Create a User from JSON
@@ -30,6 +32,7 @@ class User {
       idNumber: json['idNumber'] as String,
       password: json['password'] as String,
       role: json['role'] as String,
+      isSelected: json['isSelected'] ?? false,
     );
   }
 
@@ -43,6 +46,7 @@ class User {
       'password' : password,
       'role' : role,
       'image': image,
+      'isSelected':isSelected
     };
   }
 }

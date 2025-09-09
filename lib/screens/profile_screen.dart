@@ -31,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }else{
             return Consumer<UserProvider>(
                 builder: (context,data,child){
-                  // print(data.me!.name);
               return Scaffold(
                   appBar: AppBar(
                     title: Text(
@@ -129,7 +128,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Center(
                               child: Text(
                                 data.me!.name,
-                                // Removed "( Gay )" for a more professional look, can be added in a bio section
                                 style: theme.textTheme.headlineSmall
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),

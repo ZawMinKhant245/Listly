@@ -57,9 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               role: roleController.text.trim()
           )
       );
-      // await FirebaseAuth.instance.signOut();
-      // if(!mounted)return;
-      showSuccessSnapBar(context, "SignUp Successfully");
+      showSuccessSnapBar(context, "SignUp Successfully.Please Signin");
       setState(() {
         mode = 'signIn';
       });

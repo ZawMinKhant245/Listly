@@ -9,13 +9,16 @@ class UserProvider with ChangeNotifier{
 
   final CollectionReference userRef=FirebaseFirestore.instance.collection('users');
 
-  Future<void>fetchAllUser()async{
-    QuerySnapshot querySnapshot=await userRef.get();
-    users=querySnapshot.docs.map((doc){
-      return User.fromJson(doc.id,doc.data() as Map<String,dynamic>);
-    }).toList();
-    notifyListeners();
+  UserProvider() {
+    // 👈 start listening automatically when provider is created
+    userRef.snapshots().listen((querySnapshot) {
+      users = querySnapshot.docs.map((doc) {
+        return User.fromJson(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+      notifyListeners();
+    });
   }
+
 
   Future<void>createUser(User user)async{
 
@@ -27,22 +30,21 @@ class UserProvider with ChangeNotifier{
 
   }
 
-  Future<void>updateUserById(String userId,Map<String,dynamic>json)async{
-    try{
-      await userRef.doc(userId).set(json);
-    }catch(e){
+  Future<void> updateUserById(String userId, Map<String, dynamic> json) async {
+    try {
+      await userRef.doc(userId).update(json); // 👈 update instead of set
+    } catch (e) {
       debugPrint('Error : $e');
     }
-    notifyListeners();
-
   }
 
-  Future<User?>findUserByPhone(String phone)async {
-    if (users.isEmpty) await fetchAllUser();
-    List<User>result = users.where((e) => e.phone == phone).toList();
-    if (result.length == 1) return result.first;
-    return null;
-  }
+
+  // Future<User?>findUserByPhone(String phone)async {
+  //   if (users.isEmpty) await fetchAllUser();
+  //   List<User>result = users.where((e) => e.phone == phone).toList();
+  //   if (result.length == 1) return result.first;
+  //   return null;
+  // }
 
   Future<User?>getUserById(String id,)async{
     print('UserId $id');
@@ -62,8 +64,16 @@ class UserProvider with ChangeNotifier{
   List<User> get members {
     return users.where((u) => u.role.toLowerCase() == "member").toList();
   }
-  List<User> get admin {
-    return users.where((u) => u.role.toLowerCase() == "admin").toList();
+
+  Future<void> clearAllSelections() async {
+    final batch = FirebaseFirestore.instance.batch();
+
+    for (var user in users) {
+      batch.update(userRef.doc(user.id), {"isSelected": false});
+    }
+
+    await batch.commit();
   }
+
 
 }

@@ -14,16 +14,6 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
 
-  Future<void>getUser()async{
-    Provider.of<UserProvider>(context, listen: false).fetchAllUser();
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUser();
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -45,68 +35,7 @@ class _RecordScreenState extends State<RecordScreen> {
                  if(me.role=='Admin'){
                    return  AdminWidget();
                  }else{
-                   return Scaffold(
-                     appBar: AppBar(
-                       title:Icon(Icons.account_circle),
-                     ),
-                     body: SingleChildScrollView(
-                       child: Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Column(
-                           children: [
-                             Container(
-                               height: 200,
-                               decoration: BoxDecoration(
-                                   color: Colors.grey,
-                                   borderRadius: BorderRadius.circular(10)
-                               ),
-                             ),
-                             const SizedBox(height: 20,),
-                             SizedBox(
-                               height: 150,
-                               child: PageView(
-                                 children: [
-                                   Container(
-                                     height: 200,
-                                     margin: EdgeInsets.symmetric(horizontal: 5),
-                                     decoration: BoxDecoration(
-                                         color: Colors.red,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                   ),
-                                   Container(
-                                     height: 200,margin: EdgeInsets.symmetric(horizontal: 5),
-                                     decoration: BoxDecoration(
-                                         color: Colors.green,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                   ),
-                                   Container(
-                                     height: 200,margin: EdgeInsets.symmetric(horizontal: 5),
-                                     decoration: BoxDecoration(
-                                         color: Colors.orange,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                             const SizedBox(height: 20,),
-                             Container(
-                               height: 200,
-                               decoration: BoxDecoration(
-                                   color: Colors.teal,
-                                   borderRadius: BorderRadius.circular(10)
-                               ),
-                             ),
-
-
-                           ],
-                         ),
-                       ),
-                     ),
-                   );
-
+                   return AdminWidget();
                  }
 
                }
@@ -126,7 +55,7 @@ class AdminWidget extends StatefulWidget {
 }
 
 class _AdminWidgetState extends State<AdminWidget> {
-  String? _selectedUserId; // 👈 track selected user ID
+  List<String> _selectedUserIds = []; // 👈 track multiple selected user IDs
 
   @override
   Widget build(BuildContext context) {
@@ -135,31 +64,82 @@ class _AdminWidgetState extends State<AdminWidget> {
         leading: const Icon(Icons.account_circle),
         elevation: 3,
         backgroundColor: Colors.indigo,
+        title: const Text("Admin Panel"),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                setState(() {
+                  _selectedUserIds.clear();
+                });
+                await Provider.of<UserProvider>(context, listen: false)
+                    .clearAllSelections(); // reset in Firestore
+                }, child: Text("Disiable",style: TextStyle(color: Colors.white),))
+
+
+
+        ],
       ),
-      body: Container(
-        width: double.infinity,
-        color: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Consumer<UserProvider>(
           builder: (context, data, child) {
             final members = data.members;
-            if (members.isEmpty) {
+            final me=data.me;
+            if (members.isEmpty&& me ==null) {
               return const Center(child: Text("No members found"));
             } else {
-              return ListView.builder(
-                shrinkWrap: true,
+              return GridView.builder(
                 itemCount: members.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 per row
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 3 / 2,
+                ),
                 itemBuilder: (context, index) {
                   final user = members[index];
-                  return RadioListTile<String>(
-                    title: Text(user.name),
-                    subtitle: Text(user.idNumber),
-                    value: user.id, // each user has unique ID
-                    groupValue: _selectedUserId,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedUserId = value; // update selection
-                      });
-                    },
+                  final isSelected = user.isSelected ?? false;
+
+                  return GestureDetector(
+                    onTap: (me != null && me.role == 'Admin')
+                        ? () async {
+                      final newValue = !isSelected;
+                      // Update Firestore
+                      await Provider.of<UserProvider>(context, listen: false)
+                          .updateUserById(user.id, {"isSelected": newValue});
+                    }
+                        : null,
+
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Colors.green
+                            : Colors.grey,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person,
+                            size: 40,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            user.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            user.idNumber,
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               );
@@ -170,4 +150,6 @@ class _AdminWidgetState extends State<AdminWidget> {
     );
   }
 }
+
+
 

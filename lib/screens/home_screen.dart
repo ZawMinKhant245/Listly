@@ -13,17 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-
-  Future<void>getUser()async{
-    Provider.of<UserProvider>(context, listen: false).fetchAllUser();
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUser();
-  }
-
   @override
   Widget build(BuildContext context) {
 
