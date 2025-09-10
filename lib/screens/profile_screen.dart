@@ -182,52 +182,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 30),
-                            // My Records Section
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                "My Records",
-                                style: theme.textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: TableCalendar(
-                                firstDay: DateTime.utc(2000, 1, 1),
-                                lastDay: DateTime.utc(2100, 12, 31),
-                                focusedDay: DateTime.now(),
-                                calendarFormat: CalendarFormat.month,
-                                selectedDayPredicate: (day) => isSameDay(day, DateTime.now()),
-                                onDaySelected: (selectedDay, focusedDay) {
-                                  // TODO: handle date tap (maybe filter records?)
-                                  print("Selected: $selectedDay");
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Card(
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // Example: Replace with actual record data
-                                            Text("Total Donation: 50 B",
-                                                style: theme.textTheme.bodyLarge),
-                                            const SizedBox(height: 8),
-                                            Text("Last Donation Date: 2023-10-26",
-                                                style: theme.textTheme.bodyLarge),
-                                            const SizedBox(height: 8),
-                                            // You could use a ListView.builder
-                                          ]))),
-                            )
+                            // const SizedBox(height: 30),
+                            // // My Records Section
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                            //   child: Text(
+                            //     "My Records",
+                            //     style: theme.textTheme.titleLarge
+                            //         ?.copyWith(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                            //   child: TableCalendar(
+                            //     firstDay: DateTime.utc(2000, 1, 1),
+                            //     lastDay: DateTime.utc(2100, 12, 31),
+                            //     focusedDay: DateTime.now(),
+                            //     calendarFormat: CalendarFormat.month,
+                            //     selectedDayPredicate: (day) => isSameDay(day, DateTime.now()),
+                            //     onDaySelected: (selectedDay, focusedDay) {
+                            //       // TODO: handle date tap (maybe filter records?)
+                            //       print("Selected: $selectedDay");
+                            //     },
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 10),
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                            //   child: Card(
+                            //       elevation: 2,
+                            //       shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(12)),
+                            //       child: Padding(
+                            //           padding: const EdgeInsets.all(16.0),
+                            //           child: Column(
+                            //               crossAxisAlignment: CrossAxisAlignment.start,
+                            //               children: [
+                            //                 // Example: Replace with actual record data
+                            //                 Text("Total Donation: 50 B",
+                            //                     style: theme.textTheme.bodyLarge),
+                            //                 const SizedBox(height: 8),
+                            //                 Text("Last Donation Date: 2023-10-26",
+                            //                     style: theme.textTheme.bodyLarge),
+                            //                 const SizedBox(height: 8),
+                            //                 // You could use a ListView.builder
+                            //               ]))),
+                            // )
                           ])));
             });
           }

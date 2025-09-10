@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:listly/provider/user_provider.dart';
 import 'package:listly/screens/profile_screen.dart';
+import 'package:listly/screens/search_screen.dart';
+import 'package:listly/screens/widgets/widget.dart';
 import 'package:provider/provider.dart';
 
 class RecordScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class RecordScreen extends StatefulWidget {
 
 
 class _RecordScreenState extends State<RecordScreen> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,28 +58,56 @@ class AdminWidget extends StatefulWidget {
 }
 
 class _AdminWidgetState extends State<AdminWidget> {
-  List<String> _selectedUserIds = []; // 👈 track multiple selected user IDs
+  List<String> _selectedUserIds = [];
+  bool isAdmin=false;
+  bool CheckAdmin(){
+    final me=Provider.of<UserProvider>(context,listen: false).me;
+    if(me == null){
+      return isAdmin;
+    }
+    if(me.role == 'Admin'){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  Widget textfromFiel(){
+    return InkWell(
+      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen())),
+      child: Container(
+        width: double.infinity,
+        height: 40,
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 8),
+          child: Text('Search',textAlign: TextAlign.start,style: TextStyle(fontSize: 18),),
+        ),
+      ),
+    );
+        
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final me=Provider.of<UserProvider>(context,listen: false).me;
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.account_circle),
-        elevation: 3,
-        backgroundColor: Colors.indigo,
-        title: const Text("Admin Panel"),
+        title: textfromFiel(),
         actions: [
           TextButton(
-              onPressed: () async {
+            iconAlignment: IconAlignment.end,
+              onPressed:me!.role == "Admin"?() async {
                 setState(() {
                   _selectedUserIds.clear();
                 });
                 await Provider.of<UserProvider>(context, listen: false)
                     .clearAllSelections(); // reset in Firestore
-                }, child: Text("Disiable",style: TextStyle(color: Colors.white),))
-
-
-
+                }:null, child: Text("Disiable",style: TextStyle(color: Colors.black),))
         ],
       ),
       body: Padding(

@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: AppBar(
           title: Text("Total Collect",style: TextStyle(fontWeight: FontWeight.bold),),
           actions: [
-            Text("50,000B",style: TextStyle(fontWeight: FontWeight.bold),)
+            Text("*****B",style: TextStyle(fontWeight: FontWeight.bold),)
           ],
         ),
       ),
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text("Colleted this month",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 20),),
                     SizedBox(height: 5,),
-                    Text("B 12,344",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 30)),
+                    Text("B ****",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 30)),
                   ],
                 ),
               ),
