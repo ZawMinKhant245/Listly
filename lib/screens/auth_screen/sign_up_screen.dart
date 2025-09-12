@@ -95,7 +95,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 const SizedBox(height:20,),
                 Image.asset('assets/flag.png',height: 200,),
-                const SizedBox(height:30,),
+                SizedBox(height: 10,),
+                Text("A revolution is not just an event, it’s a movement.",textAlign: TextAlign.center,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                const SizedBox(height:20,),
                 TextFromFieldWidget(
                   textEditingController: nameController,
                   icons: Icon(Icons.person),text: 'Name',),

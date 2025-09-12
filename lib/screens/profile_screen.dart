@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:listly/provider/user_provider.dart';
+import 'package:listly/screens/widgets/widget.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:listly/provider/auth_provider.dart ' as AP;
@@ -14,11 +19,96 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
+  Future<String?> pickAndUploadImageToImgbb() async {
+    try {
+      // Step 1: Pick image
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage == null) return null;
+
+      // Step 2: Read image as bytes
+      final bytes = await File(pickedImage.path).readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      // Step 3: Upload to ImgBB
+      const apiKey = 'db3cabe2e2f148b81cb4be0675beaa3f';
+      final url = Uri.parse('https://api.imgbb.com/1/upload?key=$apiKey');
+
+      final response = await http.post(
+        url,
+        body: {
+          'image': base64Image,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final imageUrl = data['data']['url'] as String;
+        return imageUrl;
+      } else {
+        print('ImgBB upload failed: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Upload error: $e');
+      return null;
+    }
+  }
+
+  Future showDialogTitle(BuildContext context,String title,String bodyText,String firstText,String secondText){
+    return showDialog(
+        context: context,
+        builder: (context){
+          return Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 5,),
+                  Text(title,style: TextStyle(fontSize: 18,fontWeight:FontWeight.w700),),
+                  SizedBox(height: 20,),
+                  Text(bodyText,style: TextStyle(fontSize: 18,fontWeight:FontWeight.w700),),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: (){},
+                          child: Text(firstText),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      ElevatedButton(
+                        onPressed: (){},
+                        child: Text(secondText),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            )
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); // Access theme for consistent styling
-
     return FutureBuilder(
         future: Provider.of<UserProvider>(context,listen: false).getUserById(FirebaseAuth.instance.currentUser!.uid),
         builder: (context,snapShoot){
@@ -31,14 +121,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }else{
             return Consumer<UserProvider>(
                 builder: (context,data,child){
+                  bool isDonated=data.me!.isSelected;
               return Scaffold(
                   appBar: AppBar(
+                    backgroundColor: Colors.indigo,
                     title: Text(
                       "Profile",
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    backgroundColor: Colors.indigo,
-                    elevation: 2,
+
                     iconTheme: IconThemeData(color: Colors.white),
                     // For back button if any
                     actions: [
@@ -52,13 +143,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text('Delete Account')),
                       ],
                         position: PopupMenuPosition.under,
-                        onSelected: (value) async {
+                        onSelected: (value){
                           // dosomething
                           if(value == 'logout'){
-                            await FirebaseAuth.instance.signOut();
-                            Provider.of<AP.AuthProvider>(context,listen: false).clearUser();
+                            // await FirebaseAuth.instance.signOut();
+                            // Provider.of<AP.AuthProvider>(context,listen: false).clearUser();
+                            showDialogTitle(context,'Alert Dialog','Are you sure want to log out?','confirm','cancel');
                           }else{
-
+                            // Provider.of<UserProvider>(context,listen: false).deleteUserById(FirebaseAuth.instance.currentUser!.uid);
                           }
                         },
                       )
@@ -74,52 +166,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  height: 130, // Slightly reduced height
+                                  height: 400, // Slightly reduced height
                                   decoration: BoxDecoration(
                                       color: Colors.indigo,
+                                      image: DecorationImage(
+                                          image: AssetImage('assets/grouplogo.png'),
+                                        fit: BoxFit.cover
+                                      ),
                                       borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(30),
                                         bottomRight: Radius.circular(30),
                                       )),
                                 ),
                                 Positioned(
-                                  bottom: -50, // Adjusted for new avatar size
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    alignment: Alignment.bottomRight,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 60, // Increased size for prominence
-                                        backgroundColor: Colors.white, // Border color
-                                        child: CircleAvatar(
-                                          radius: 57,
-                                          backgroundImage: NetworkImage(
-                                              "https://thvnext.bing.com/th/id/OIP.EwG6x9w6RngqsKrPJYxULAHaHa?w=194&h=194&c=7&r=0&o=7&cb=ucfimgc2&pid=1.7&rm=3"),
-                                        ),
+                                  bottom: -60,
+                                  child: InkWell(
+                                    onTap:()async{
+                                      // Handle edit profile picture
+                                      final image=await pickAndUploadImageToImgbb();
+                                      if(image != null){
+                                        await Provider.of<UserProvider>(context,listen: false)
+                                            .updateUserById(data.me!.id, {"image":image});
+                                      }
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 60, // Increased size for prominence
+                                      backgroundColor: Colors.white, // Border color
+                                      child: CircleAvatar(
+                                        radius: 57,
+                                        backgroundImage: data.me!.image.isEmpty? NetworkImage(
+                                            "https://th.bing.com/th/id/OIP.FuZ0GEO8Hf2feHRgKn7S5wHaH5?w=178&h=190&c=7&r=0&o=7&pid=1.7&rm=3")
+                                        :NetworkImage(data.me!.image),
                                       ),
-                                      Positioned(
-                                        // Positioned the edit button more cleanly
-                                        bottom: 5,
-                                        right: 5,
-                                        child: Material(
-                                          // Added Material for InkWell effect
-                                          color: Colors.indigo,
-                                          shape: CircleBorder(),
-                                          elevation: 2,
-                                          child: InkWell(
-                                            onTap: () {
-                                              // Handle edit profile picture
-                                            },
-                                            customBorder: CircleBorder(),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(6.0),
-                                              child: Icon(Icons.edit,
-                                                  size: 18, color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -177,6 +256,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         title: "Role",
                                         subtitle: data.me!.role,
                                       ),
+                                      if(data.me!.role != "Admin")...[
+                                        Container(
+                                          height: 40,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                              color: isDonated?Colors.green:Colors.red,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child:isDonated?const Center(child: Text("Current Month Donated")):const Center(child: Text("You are not Donate Yet")),
+                                        )
+                                      ]
+
                                     ],
                                   ),
                                 ),

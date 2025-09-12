@@ -107,7 +107,18 @@ class _AdminWidgetState extends State<AdminWidget> {
                 });
                 await Provider.of<UserProvider>(context, listen: false)
                     .clearAllSelections(); // reset in Firestore
-                }:null, child: Text("Disiable",style: TextStyle(color: Colors.black),))
+                }:null, child:me.role == "Admin"?Text("Disiable",style: TextStyle(color: Colors.black),)
+              : CircleAvatar(
+            radius: 20, // Increased size for prominence
+            backgroundColor: Colors.white, // Border color
+            child: CircleAvatar(
+              radius: 57,
+              backgroundImage:(me.image.isEmpty)? NetworkImage(
+                  "https://th.bing.com/th?q=Grey+Person+Icon&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&pid=InlineBlock&mkt=en-WW&cc=TH&setlang=en&adlt=strict&t=1&mw=247")
+                  :NetworkImage(me.image),
+            ),
+          ),
+          )
         ],
       ),
       body: Padding(
@@ -145,28 +156,33 @@ class _AdminWidgetState extends State<AdminWidget> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? Colors.green
-                            : Colors.grey,
+                            : Colors.grey.shade400,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.white,
+                          CircleAvatar(
+                            radius: 20, // Increased size for prominence
+                            backgroundColor: Colors.white, // Border color
+                            child: CircleAvatar(
+                              radius: 57,
+                              backgroundImage:(user.image.isEmpty)? NetworkImage(
+                                  "https://th.bing.com/th/id/OIP.FuZ0GEO8Hf2feHRgKn7S5wHaH5?w=178&h=190&c=7&r=0&o=7&pid=1.7&rm=3")
+                                  :NetworkImage(data.me!.image),
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             user.name,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: isSelected?Colors.white:Colors.black,
                             ),
                           ),
                           Text(
                             user.idNumber,
-                            style: const TextStyle(color: Colors.white70),
+                            style: TextStyle(color: isSelected?Colors.white:Colors.black,fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),

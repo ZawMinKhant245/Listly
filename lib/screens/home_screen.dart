@@ -15,7 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: AppBar(
@@ -73,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context,data,child){
                         final members=data.members;
                         final me=data.me;
-                        if(members.isEmpty){
+                        if(members.isEmpty && me != null){
                           return const Center(child: Text("No members found"),);
                         }
                         else{
@@ -86,8 +85,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final isCurrentUser = me != null && user.id == me.id;
                                 return Container(
                                   color:isCurrentUser?Colors.orange:null,
+
                                   child: ListTile(
-                                    leading: Icon(Icons.account_circle),
+                                    leading:  CircleAvatar(
+                                      radius: 20, // Increased size for prominence
+                                      backgroundColor: Colors.white, // Border color
+                                      child: CircleAvatar(
+                                        radius: 57,
+                                        backgroundImage:(user.image.isEmpty)? NetworkImage(
+                                            "https://th.bing.com/th?q=Grey+Person+Icon&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&pid=InlineBlock&mkt=en-WW&cc=TH&setlang=en&adlt=strict&t=1&mw=247")
+                                            :NetworkImage(user.image),
+                                      ),
+                                    ),
                                     title: Text(user.name),
                                     subtitle: Text(user.idNumber),
 

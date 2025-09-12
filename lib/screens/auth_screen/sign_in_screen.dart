@@ -67,7 +67,9 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 const SizedBox(height:20,),
                 Image.asset('assets/flag.png',height: 200,),
-                const SizedBox(height:30,),
+                const SizedBox(height:10,),
+                Text("Let's Reunion our country by our's hand",textAlign: TextAlign.center,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                const SizedBox(height:20,),
                 TextFromFieldWidget(
                   textEditingController: emailController,
                   icons: const Icon(Icons.email),
@@ -127,8 +129,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     }
                   },),
                 ),
-                const SizedBox(height: 20,),
-                TextButton(onPressed: (){}, child: Text('Forgot password?',style: TextStyle(fontSize: 20),)),
                 const SizedBox(height: 20,),
                 Text('Or',style: TextStyle(fontSize: 24),),
                 const SizedBox(height: 20,),

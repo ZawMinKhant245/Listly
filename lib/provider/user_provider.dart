@@ -32,7 +32,8 @@ class UserProvider with ChangeNotifier{
 
   Future<void> updateUserById(String userId, Map<String, dynamic> json) async {
     try {
-      await userRef.doc(userId).update(json); // 👈 update instead of set
+      await userRef.doc(userId).update(json);
+      me=await getUserById(userId);// 👈 update instead of set
     } catch (e) {
       debugPrint('Error : $e');
     }
@@ -74,6 +75,16 @@ class UserProvider with ChangeNotifier{
 
     await batch.commit();
   }
+
+  Future<void> deleteUserById(String userId) async {
+    try {
+      await userRef.doc(userId).delete();
+      debugPrint("User $userId deleted successfully");
+    } catch (e) {
+      debugPrint("Error deleting user: $e");
+    }
+  }
+
 
 
 }
