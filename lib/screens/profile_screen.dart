@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future showDialogTitle(BuildContext context,String title,String bodyText,String firstText,String secondText){
+  Future showDialogTitle(BuildContext context,String title,String bodyText,String firstText,String secondText,VoidCallback onPressed){
     return showDialog(
         context: context,
         builder: (context){
@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                          onPressed: (){},
+                          onPressed: onPressed,
                           child: Text(firstText),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigo,
@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(width: 10,),
                       ElevatedButton(
-                        onPressed: (){},
+                        onPressed: ()=> Navigator.of(context).pop(),
                         child: Text(secondText),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
@@ -146,11 +146,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onSelected: (value){
                           // dosomething
                           if(value == 'logout'){
-                            // await FirebaseAuth.instance.signOut();
-                            // Provider.of<AP.AuthProvider>(context,listen: false).clearUser();
-                            showDialogTitle(context,'Alert Dialog','Are you sure want to log out?','confirm','cancel');
+                            showDialogTitle(context,'Alert Dialog','Are you sure want to log out?','confirm','cancel',() async {
+                              await FirebaseAuth.instance.signOut();
+                              Provider.of<AP.AuthProvider>(context,listen: false).clearUser();
+                              Navigator.of(context).pop();
+                            });
                           }else{
-                            // Provider.of<UserProvider>(context,listen: false).deleteUserById(FirebaseAuth.instance.currentUser!.uid);
+                            showDialogTitle(context,'Alert Dialog','Are you sure want to  DELETE account?','confirm','cancel',() async {
+                              Provider.of<UserProvider>(context,listen: false).deleteUserById(FirebaseAuth.instance.currentUser!.uid);
+                            });
+
                           }
                         },
                       )
@@ -195,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: CircleAvatar(
                                         radius: 57,
                                         backgroundImage: data.me!.image.isEmpty? NetworkImage(
-                                            "https://th.bing.com/th/id/OIP.FuZ0GEO8Hf2feHRgKn7S5wHaH5?w=178&h=190&c=7&r=0&o=7&pid=1.7&rm=3")
+                                            "https://th.bing.com/th?q=Grey+Person+Icon&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&pid=InlineBlock&mkt=en-WW&cc=TH&setlang=en&adlt=strict&t=1&mw=247")
                                         :NetworkImage(data.me!.image),
                                       ),
                                     ),
