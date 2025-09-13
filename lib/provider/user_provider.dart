@@ -27,6 +27,7 @@ class UserProvider with ChangeNotifier{
     }catch(e){
       debugPrint('Error : $e');
     }
+    notifyListeners();
 
   }
 
@@ -37,6 +38,7 @@ class UserProvider with ChangeNotifier{
     } catch (e) {
       debugPrint('Error : $e');
     }
+    notifyListeners();
   }
 
 
