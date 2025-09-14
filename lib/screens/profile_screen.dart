@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return FutureBuilder(
         future: Provider.of<UserProvider>(context,listen: false).getUserById(FirebaseAuth.instance.currentUser!.uid),
         builder: (context,snapShoot){
-          if(snapShoot.connectionState ==ConnectionState.waiting){
+          if(snapShoot.connectionState == ConnectionState.waiting){
             return Scaffold(
               body: Center(
                 child:CircularProgressIndicator(color: Colors.teal,),

@@ -18,4 +18,5 @@ class AuthProvider with ChangeNotifier{
     user =null;
     notifyListeners();
   }
+
 }

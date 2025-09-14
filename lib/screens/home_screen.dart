@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:listly/provider/note_provider.dart';
 import 'package:listly/provider/user_provider.dart';
 import 'package:listly/screens/note/note_home_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final totalMember=Provider.of<UserProvider>(context,listen: false).members.length;
+    final totalValue= Provider.of<NoteProvider>(context,listen: false).getTotalMonth();
+    final totalMonthValue= Provider.of<NoteProvider>(context,listen: false).getCurrentMonthTotal();
     return  Scaffold(
       appBar: AppBar(
         title: AppBar(
           title: const Text("Total Collected",style: TextStyle(fontWeight: FontWeight.bold),),
-          actions: const [
-            Text("*****B",style: TextStyle(fontWeight: FontWeight.bold),)
+          actions:  [
+            Text('${totalValue} B',style: TextStyle(fontWeight: FontWeight.bold),)
           ],
         ),
       ),
@@ -51,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text("Colleted this month",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 20),),
                         SizedBox(height: 5,),
-                        Text("B ****",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 30)),
+                        Text("B ${totalMonthValue}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 30)),
                       ],
                                 ),
                   ),
@@ -61,14 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 20,),
-              Text('DashBoard',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-              const SizedBox(height: 10,),
-              Container(
-                width: double.infinity,
-                height: 200,
-                color: Colors.indigo,
-              ),
-              const SizedBox(height: 10,),
+              // Text('DashBoard',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+              // const SizedBox(height: 10,),
+              // Container(
+              //   width: double.infinity,
+              //   height: 200,
+              //   color: Colors.indigo,
+              // ),
+              // const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

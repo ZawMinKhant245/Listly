@@ -9,7 +9,10 @@ class NoteProvider with ChangeNotifier {
   final CollectionReference noteRef = FirebaseFirestore.instance.collection('notes');
 
   NoteProvider() {
-    noteRef.snapshots().listen((querySnapshot) {
+    noteRef
+        .orderBy('date', descending: true) //  sort newest first
+        .snapshots()
+        .listen((querySnapshot) {
       notes = querySnapshot.docs.map((doc) {
         return Note.fromJson(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
@@ -52,4 +55,33 @@ class NoteProvider with ChangeNotifier {
     }
     return null;
   }
+
+  int getTotalMonth()  {
+    int totalAmount = 0;
+
+    for (var note in notes) {
+      // Convert String to int safely
+      int value = int.tryParse(note.total) ?? 0;
+      totalAmount += value;
+    }
+
+    return totalAmount;
+  }
+
+  int getCurrentMonthTotal()  {
+    int totalAmount = 0;
+    final now = DateTime.now();
+
+    for (var note in notes) {
+      // Check if note.date is in the current month and year
+      if (note.date.year == now.year && note.date.month == now.month) {
+        int value = int.tryParse(note.total) ?? 0;
+        totalAmount += value;
+      }
+    }
+
+    return totalAmount;
+  }
+
+
 }

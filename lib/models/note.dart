@@ -29,8 +29,13 @@ Map<String,dynamic>toJson(){
       id: id,
       title: json['title'] ?? '',
       content: json['content'] ?? '',
-      date: (json['date'] as Timestamp).toDate(),
-      total: json['monthly'] ?? '',
+      date: (json['date'] is Timestamp)
+          ? (json['date'] as Timestamp).toDate()
+          : (json['date'] is String)
+          ? DateTime.tryParse(json['date']) ?? DateTime.now()
+          : DateTime.now(),
+      total: json['monthly'] ?? '0',
     );
   }
+
 }
