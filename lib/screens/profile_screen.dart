@@ -154,6 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }else{
                             showDialogTitle(context,'Alert Dialog','Are you sure want to  DELETE account?','confirm','cancel',() async {
                               Provider.of<UserProvider>(context,listen: false).deleteUserById(FirebaseAuth.instance.currentUser!.uid);
+                              Provider.of<AP.AuthProvider>(context,listen: false).clearUser();
+                              Navigator.of(context).pop();
                             });
 
                           }
@@ -171,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  height: 400, // Slightly reduced height
+                                  height: 250, // Slightly reduced height
                                   decoration: BoxDecoration(
                                       color: Colors.indigo,
                                       image: DecorationImage(

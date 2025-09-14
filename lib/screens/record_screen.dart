@@ -22,28 +22,28 @@ class _RecordScreenState extends State<RecordScreen> {
     return FutureBuilder(
         future:Provider.of<UserProvider>(context,listen: false).getUserById(FirebaseAuth.instance.currentUser!.uid),
         builder: (context,snapShoot){
-         if(snapShoot.connectionState ==ConnectionState.waiting){
-           return Scaffold(
-               body: Center(
-                   child:CircularProgressIndicator(color: Colors.teal,),
-               ),
-           );
-         }else{
-           return  Consumer<UserProvider>(
-               builder: (context,data,child){
-                 final me=data.me;
-                 if(me == null){
-                   return const Center(child: CircularProgressIndicator(color:Colors.indigo));
-                 }
-                 if(me.role=='Admin'){
-                   return  AdminWidget();
-                 }else{
-                   return AdminWidget();
-                 }
+          if(snapShoot.connectionState ==ConnectionState.waiting){
+            return Scaffold(
+              body: Center(
+                child:CircularProgressIndicator(color: Colors.teal,),
+              ),
+            );
+          }else{
+            return  Consumer<UserProvider>(
+                builder: (context,data,child){
+                  final me=data.me;
+                  if(me == null){
+                    return const Center(child: CircularProgressIndicator(color:Colors.indigo));
+                  }
+                  if(me.role=='Admin'){
+                    return  AdminWidget();
+                  }else{
+                    return AdminWidget();
+                  }
 
-               }
-           );
-         }
+                }
+            );
+          }
         }
     );
 
@@ -88,7 +88,7 @@ class _AdminWidgetState extends State<AdminWidget> {
         ),
       ),
     );
-        
+
   }
 
 
@@ -101,13 +101,13 @@ class _AdminWidgetState extends State<AdminWidget> {
         actions: [
           TextButton(
             iconAlignment: IconAlignment.end,
-              onPressed:me!.role == "Admin"?() async {
-                setState(() {
-                  _selectedUserIds.clear();
-                });
-                await Provider.of<UserProvider>(context, listen: false)
-                    .clearAllSelections(); // reset in Firestore
-                }:null, child:me.role == "Admin"?Text("Disiable",style: TextStyle(color: Colors.black),)
+            onPressed:me!.role == "Admin"?() async {
+              setState(() {
+                _selectedUserIds.clear();
+              });
+              await Provider.of<UserProvider>(context, listen: false)
+                  .clearAllSelections(); // reset in Firestore
+            }:null, child:me.role == "Admin"?Text("Unselecte",style: TextStyle(color: Colors.black),)
               : CircleAvatar(
             radius: 20, // Increased size for prominence
             backgroundColor: Colors.white, // Border color
@@ -144,13 +144,12 @@ class _AdminWidgetState extends State<AdminWidget> {
 
                   return GestureDetector(
                     onTap: (me != null && me.role == 'Admin')
-                        ? () async {
-                      final newValue = !isSelected;
-                      // Update Firestore
-                      await Provider.of<UserProvider>(context, listen: false)
-                          .updateUserById(user.id, {"isSelected": newValue});
+                        ? () {
+                      Provider.of<UserProvider>(context, listen: false)
+                          .toggleSelection(user.id);
                     }
                         : null,
+
 
                     child: Container(
                       decoration: BoxDecoration(
@@ -197,6 +196,3 @@ class _AdminWidgetState extends State<AdminWidget> {
     );
   }
 }
-
-
-

@@ -40,6 +40,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final andminCheck=Provider.of<UserProvider>(context,listen: false).me!.role;
     return Scaffold(
       appBar: AppBar(
         title: Text('Details Report'),
@@ -50,7 +51,8 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                   && totalText != null
                   && titleText!.isNotEmpty
                   && contentText!.isNotEmpty
-                  && totalText!.isNotEmpty?(){
+                  && totalText!.isNotEmpty
+                  && andminCheck =="Admin"?(){
             final provider=Provider.of<NoteProvider>(context,listen: false);
             final docRef = FirebaseFirestore.instance
                 .collection('notes')

@@ -18,7 +18,8 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget>listWidget=[
     HomeScreen(),
     RecordScreen(),
-    ProfileScreen()
+    ProfileScreen(),
+
   ];
   @override
   Widget build(BuildContext context) {

@@ -49,4 +49,31 @@ class User {
       'isSelected':isSelected
     };
   }
+
+  // 👇 Add this
+  User copyWith({
+    String? id,
+    String? name,
+    String? phone,
+    String? email,
+    String? idNumber,
+    String? password,
+    String? role,
+    String? image,
+    bool? isSelected,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      idNumber: idNumber ?? this.idNumber,
+      password: password ?? this.password,
+      role: role ?? this.role,
+      image: image ?? this.image,
+      isSelected: isSelected ?? this.isSelected,
+    );
+  }
+
 }
+
